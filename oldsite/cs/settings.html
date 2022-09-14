@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+    <title>Computoid CS Portal: Settings</title>
+    <link href="css/csstyle.css" media="screen" rel="stylesheet" type=
+    "text/css" />
+</head>
+
+<body>
+    <div id="body_wrapper">
+        <!-- Start of Body Container -->
+
+        <div id="body_container">
+            <div id="body_container_b">
+                <div id="body_container_c">
+                    <!-- Start of Page Header -->
+
+                    <div id="page_header">
+                        <!-- Website Title -->
+
+                        <h1><span class="hidethis">Counter-Strike</span></h1>
+                    </div><!-- End of Page Header -->
+                    <!-- Start of Page Content -->
+
+                    <div id="page_content">
+                        <h1>Settings</h1>
+
+                        <p>What settings you have in cs can determine whether
+                        your hit reg is spot on or you're lagging all over the
+                        place, and getting rolled by scrubs. Too many cs
+                        players do not properly configure their settings, and
+                        would be doing so much better with a few minutes of
+                        configuring them.</p><br />
+						
+						<h2>Contents</h2>
+						<p><a href="#version">1 Choosing version</a><br />
+						<a href="#configure">2 Configuring CS</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<a href="#ingame">2.1 In Game Settings</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<a href="#userconfig">2.2 Userconfig</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#netcode">2.2.1 Netcode</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#performance">2.2.2 Performance</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#bind">2.2.3 Binds</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#preference">2.2.4 Preferences</a><br />
+						    &nbsp;&nbsp;&nbsp;&nbsp;<a href="#launch">2.3 Launch Settings</a>
+
+                       <a name="version"></a> <h2>What version of cs 1.6</h2>
+			
+                        <p>First I'll cover choosing the right version of cs.
+                        As of 4/21/13, there are three main ways to run cs
+                        1.6.</p>
+
+                        <p>To run the official new steam version, just buy it
+                        <a href=
+                        "http://store.steampowered.com/app/10/">here</a> its
+                        only $10, and goes on sale for as low as $2.50
+                        sometimes. You also get Counter-Strike: Condition Zero
+                        with it. This is worth several times its price. If you
+                        do not have a credit card, buy a steam giftcard, or a
+                        visa giftcard, etc.</p>
+
+                        <p>Deprecated option: run the old 2009 build 4554
+                        version on steam. This is a work around from when the
+                        Febuary 2013 steampipe update came out with lots of
+                        bugs. Most of the bugs have been patched since then and
+                        the newest steam cs provides the best experience
+                        currently. If you need to talk with nonsteam clients,
+                        this version is needed, but you will not be able to
+                        talk with other legit steam players with this method as
+                        the new update switched the voice codecs. This is a
+                        little bit tricky to set up, so don't try this if you
+                        don't have patience, follow guide <a href=
+                        "oldcs.html">here</a>.</p>
+
+                        <p>The third option is to use a nonsteam client. This
+                        is a last resort, support the developers and buy it as
+                        linked above. If your going to use a nonsteam client,
+                        use cswarzone.</p><br />
+
+                        <a name="configure"></a> <h1>Configuring CS</h1>
+
+                        <p>This guide is written for the new steam cs 1.6, but
+                        most of this applies to all other versions, differences
+                        in notation between them will be noted in extreme
+                        cases.</p>
+
+                        <a name="ingame"></a> <h2>In Game Settings</h2>
+
+                        <p>Most settings can be set in game, it's easiest
+                        usually to first launch cs and change settings before
+                        going into config files.</p>
+						
+						<p>Start by setting your name, spray, and crosshair preferences. I like the light blue(teal translucent color) soft on eyes(doesn't blend in with anything unless your on fy_poolday.
+						Maybe in a later guide I'll provide instructions for custom sprays. On the keyboard tab you can change the key for certain in game functions,
+						see later part in guide for binding in userconfig.</p>
+						
+						<p>For the mouse tab, you want mouse look enabled, mouse filter turned off, and raw input enabled mainly. Mouse filter would make you lcess accurate. Rawinput disables all mouse accel by
+						default, and is most reliable form of input. I highly recommend switching if you haven't already, though you will need to rediscover your favorite sensitivity. Pros in cs use low sensitivities
+						and move there mouse with their arms not their wrists. Using a joystick puts you at a massive disadvantage against the competition. All servers disable autoaim, so don't bother leaving it on.</p>
+						
+						<br><img src="images/2013-05-26_00001.jpg" alt="Mouse settings" height="480" width="640"> <br>
+												
+						<p>Now for video settings. OpenGL should always be the renderer, as software mode looks terrible. D3D is no longer a choice in the new cs, as it was buggy, and made making wallhacks easy.
+						CS was designed for lower resolutions,so I recommend playing at either 1024 x 768, 800 x 600, or 640 x 480. I use 800 x 600. Recoil will be the same at any resolution as it is serverside.</p>
+						
+						<br><img src="images/2013-05-26_00002.jpg" alt="Mouse settings" height="480" width="640"> <br>
+						
+						<p>Test audio and voice values to find what works best for you. Nothing to change on the content lock page, and no reason to change anything on it.</p>
+						<p>For much more customization, you need to create a userconfig and set launch settings as linked below</p>
+                        <a name="userconfig"></a><h2>Creating a userconfig!</h2>
+
+                        <p>Navigate to the Half-Life folder in
+                        steamapps/common. Usually its in C:/Program
+                        Files/Steam/Steamapps/common/. Inside you should see a
+                        cstrike and a platform amoung other folders at a
+                        minimum. Create a new folder named cstrike_addon, now
+                        your folder should look something like this, note I
+                        also have Half-Life installed in this screenshot.
+                        <img src="images/hldir.jpg" /> Enter the cstrike_addon
+                        folder. This is the new place to put custom resources
+                        for cs to use, such as maps, models, config files, etc,
+                        so you no longer need to mix your custom files with the
+                        vanila game files. The first thing we are going to add
+                        a userconfig.cfg file, a file that servers cannot edit
+                        with settings we want consistently in cs such as
+                        netcode, sensitivity, etc. Download <a href=
+                        "http://files.computoid.com/userconfig.cfg">this</a>
+                        and save it to your cstrike_addons folder(right click
+                        save link as/ save link target as.) A userconfig can be
+                        broken up into 4 main parts. Netcode, performance,
+                        binds, and preferences.</p><br />
+
+                        <a name="netcode"></a><h3>Netcode</h3>
+
+                        <p>rate - Amount of data you recieve from a server.
+                        Ping increases as rate increases. Generally you want a
+                        rate around 25000. While in the 2013 updates, the
+                        raised the max value to 100000, at time of writing few
+                        servers can handle that without massive lag or even
+                        have an sv_maxrate that high.</p>
+
+                        <p>cl_cmdrate - Should be higher than frames per
+                        second, max amount of packets you send to the server.
+                        For 100 fps (you should have 100 fps in game), I've
+                        been using 105. This is too high if you are getting
+                        loss on netgraph and means you are not updating fast
+                        enough.</p>
+
+                        <p>cl_updaterate - Amount of updates you are requesting
+                        from ther server. 100 was supposed to be max, but to
+                        cut down on support tickets, they raised it to 102. I
+                        use 102. Lower this if you are on a shit server that
+                        can't send enough updates, causing choke on
+                        netgraph.</p>
+
+                        <p>ex_interp - Sets the amount of time (in seconds) to
+                        interpolate in between each successive
+                        update(cl_updaterate). If cl_updaterate is 100, this
+                        will automatically calculate correct interp. I force
+                        this to 0.01. Peope with bad internet are known to use
+                        .1 .Calculated 1/cl_updaterate.</p>
+
+                        <p>cl_nosmooth - Determines whether to correct model
+                        abruptly when prediction is wrong. You want this set to
+                        1 so your shots aren't missing.</p>
+
+                        <p>Other netcode notes: Feel free to experiment with
+                        these settings, test them on different servers. Don't
+                        mess with fpsmodem, cl_rate, etc the net settings here
+                        are the only ones you should change. Some servers force
+                        rates on people for various reasons. On lan, your rate
+                        setting does not matter as sv_lanrate is used by the
+                        server</p><br />
+
+                        <a name="performance"></a> <h3>Performance</h3>
+
+                        <p>Counter-strike is an old game with low system
+                        requirements, so not many performance settings need to
+                        be manually set in a userconfig.</p>
+
+                        <p>In order to get good hit registration, in cs you
+                        want to limit your fps. CS was designed to run at 100
+                        fps. So first turn off vync with gl_vsync 0. Then you
+                        want to cap your fps_max at 99.5 with fps_max "99.5".
+                        Since the new cs update, in order to get exactly 100
+                        fps, you need to set it to 99.5. If you are running an
+                        older version of cs, set fps_max to 100.</p>
+
+                        <p>snd_noextraupdate to "1" means that cs will not use
+                        extra sound updates, so you will have better fps
+                        according to alfred at valve. There is no reason this
+                        should be set to "0".</p>
+
+                        <p>gl_ansio "0" turns off antialiasing, so you'll have
+                        smoother fps and gameplay.</p>
+
+                        <p>Here are the opengl graphics modes. I use the
+                        default one, but if you have a really good computer or
+                        a bad computer, feel free to try one of these.(don't
+                        put them all in your config)</p>
+                        
+						<p>gl_texturemode "GL_NEAREST" // Simple (no texture
+                        filtering, no atmospheric filtering) [bad
+                        quality]<br />
+                        gl_texturemode "GL_LINEAR" // Simple (texture
+                        filtering, no atmospheric filtering)<br />
+                        gl_texturemode "GL_NEAREST_MIPMAP_NEAREST" // Bilinear
+                        (no texture filtering, atmospheric filtering normal)
+                        [low quality video checkbox in current cs]<br />
+                        gl_texturemode "GL_LINEAR_MIPMAP_NEAREST" // Bilinear
+                        (texture filtering, atmospheric filtering normal)
+                        [default, use this]<br />
+                        gl_texturemode "GL_NEAREST_MIPMAP_LINEAR" // Trilinear
+                        (no texture filtering, atmospheric filtering
+                        high)<br />
+                        gl_texturemode "GL_LINEAR_MIPMAP_LINEAR" // Trilinear
+                        (no texture filtering, atmospheric filtering high)
+                        [best quality]</p>
+
+                        <a name="bind"></a><h3>Binds</h3> 
+
+                        <p>Binding is a useful tool to make playing cs easier,
+                        and faster. The main use of binding in cs, is making
+                        buying easier and faster, as often the buy period is
+                        really short and it gets really tiresome buying stuff
+                        manually. Another use is to relocated buttons to easier
+                        places. I set c to use microphone, as pressing k is
+                        really akward when holding a mouse. Below is my
+                        binds(also included in the above userconfig. I am no
+                        means an expert in binding, look elsewhere if you want
+                        more detailed binding instructions and scripts.</p>
+
+                        <p>bind "F3" "m4a1; ak47; primammo; deagle; secammo;
+                        vesthelm; defuser; flash; hegren; sgren; nvgs;
+                        flash"<br />
+                        bind "F4" "deagle; secammo; flash; hegren; sgren; nvgs;
+                        defuser; shield; vesthelm"<br />
+                        bind "F5" "awp; primammo; deagle; secammo; flash;
+                        hegren; sgren; nvgs; defuser; vesthelm"<br />
+                        bind "c" "+voicerecord"<br />
+                        bind "k" "radio3"</p>
+
+                        <a name="preference"></a><h3>Preferences</h3> 
+
+                        <p>In the preferences section, I put settings that I do
+                        not change often. By putting them in your
+                        userconfig.cfg, you have slowhack protection, so a
+                        server cannot make you loose your favorite mouse
+                        sensitivity or volume for example. If you have settings
+                        you like, you can copy them from config.cfg.</p>
+
+                        <p>I recommend you use rawinput, as it provides better
+                        mouse movement and such than the mouse going through
+                        windows. m_rawinput 1 turns this on.</p>
+						
+						<p>net_graph 3 can be used to disable your game's "performance" at the given moment. It displays mainly frames per second, ping, loss, and choke.
+						This way you can tell if you are having computer problems (fps), internet problems (ping). Loss means that you are "too slow", cl_cmdrate could be too high, not much you can do if you are getting loss,
+						usually is your internet's fault, but is not a problem. Choke means that the server is too slow, or
+						you have too high of a cl_updaterate. If choke is usually 0, but goes up a little in very busy areas, it usually is not a problem, but sometimes it means find a new server.</p>
+						
+						<p>hud_fastswitch 1 - This allows you to change weapons with a single press of any key or the scroll wheel. Change to 2 for old hud_fastswitch behavior or 0 to disable(not recommended).</p>
+						
+						<p>cl_righthand - Set to 1 is default. Some prefer it left handed or set to 0.</p>
+						
+						<p>voice_enable - Set to 0 and never hear annoying 10 year old players again. Highly recommended to turn off with 0 if playing in nonsteam public games</p>
+						
+						<p>Just a few commands were listed here. Use directories such as this one for more commands. 
+
+                        <a name="launch"></a> <h2>Launch settings</h2>
+
+                        <p>Some cs settings must be passed command line and
+                        cannot be changed in game via console or config files.
+                        After the Febuary 2013 update, many launch settings
+                        became deprecated and implemented as in game cvars.</p>
+
+                        <p>To set your launch options for cs, in steam library
+                        right click counter-strike and click properties and
+                        then click set launch options.</p>
+
+                        <p>-nofbo Recommends you add this launch switch to
+                        force cs to use the old rendering method(faster). If
+                        you just want to turn off antialiasing for the new cs,
+                        use -nomsaa . You can force your resolution with -w and
+                        -h, for example -w 800 -h 600</p>
+                    </div><!-- End of Page Content -->
+                </div>
+            </div>
+        </div><!-- End of Body Container -->
+        <!-- Start of Navigation Menu -->
+
+        <div id="navmenu">
+            <div id="navmenu_b">
+                <div id="navmenu_c">
+                    <h3><span class="hidethis">Site Menu:</span></h3>
+
+                    <ul>
+                        <li class="list_first">
+                            <a href="/cs/">CS Home</a>
+                        </li>
+
+                        <li>
+                            <a href="settings.html">Settings</a>
+                        </li>
+
+                        <li>
+                            <a href="oldcs.html">Running old cs</a>
+                        </li>
+
+                        <li>
+                            <a href="history.html">History</a>
+                        </li>
+
+                        <li>
+                            <a href="http://computoid.com">Back to
+                            Computoid.com</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div><!-- End of Navigation Menu -->
+
+        <div class="clearthis">
+            &nbsp;
+        </div><!-- Start of Page Footer -->
+
+        <div id="page_footer">
+            <a href="http://computoid.com">Website by G4Vi</a><br />
+        </div><!-- End of Page Footer -->
+    </div>
+</body>
+</html>

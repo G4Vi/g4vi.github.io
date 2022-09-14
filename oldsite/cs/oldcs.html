@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1" />
+<title>Computoid CS Portal: Running old cs</title>
+
+<link rel="stylesheet" href="css/csstyle.css" type="text/css" media="screen" />
+
+</head>
+
+<body>
+
+	<div id="body_wrapper">
+
+
+		<!-- Start of Body Container -->
+
+		<div id="body_container">
+		<div id="body_container_b">
+		<div id="body_container_c">
+
+
+			<!-- Start of Page Header -->
+
+			<div id="page_header">
+
+				<!-- Website Title -->
+
+				<h1>
+				<span class="hidethis">Counter-Strike</span>
+				</h1>
+
+			</div>
+
+			<!-- End of Page Header -->
+
+
+			<!-- Start of Page Content -->
+
+			<div id="page_content">		
+				<h2>Running the old steam cs (June 15 2009 build 4554 protocol 48)</h2>
+				
+				<p><b>
+				<h3>Editors Note:</h3> This method is deprecated as the main bugs of the steam version have been patched and the newest version with a few tweaks provides this best experience. While both the new and old cs uses protocol 48, the new version uses
+				a different voice codec, so you will not be able to hear legit steam players using this, you will only hear whiny nonsteam wallhacking players.
+										</b>	</p>
+				
+							
+				<p>
+				First of all, if you have your old cs folder before the update that was stored in steamapps/username, put it/leave it in that location with the folder named "counter-strike" without quotes. If you don't have it anymore, download this
+				<br>
+				<li><a href="link_dead_sorry">CS preset</a></li>
+				<br>
+				and extract to steamapps/username.
+				</p>
+				
+				<p>
+				The next step is getting the old files back necessary to run the old cs, the gcfs.
+				<br> <br>
+You need:
+<br><br>
+<li>condition zero models.gcf</li> 
+<br>
+<li>counter-strike.gcf</li> 
+<br>
+<li>half-life engine.gcf</li> 
+<br>
+<li>half-life.gcf</li> 
+<br>
+<li>platform.gcf</li> 
+<br>
+<li>sourceinit.gcf</li> 
+<br>
+				</p>
+				
+				<p>
+				Make sure you have the preupdate ones. If you do not, rename them and download them from here(I had to do this, slow download unfortunately.)
+				<br><br>
+<a href="link_dead_sorry">link_dead_sorry</a>
+<br><br>
+<a href="link_dead_sorry">link_dead_sorry</a>
+<br><br>
+<a href="link_dead_sorry">link_dead_sorry</a>
+<br><br>
+<a href="link_dead_sorry">link_dead_sorry</a>
+<br><br>
+<a href="link_dead_sorry">link_dead_sorry</a>
+<br><br>
+<a href="link_dead_sorry">link_dead_sorry</a>
+				</p>
+				
+				<p>
+				Replace the underscores with spaces so they match the names of the files listed above. After you put these in steamapps, you now have all the files needed to run cs, now you just need away of launching it.
+				</p>
+				
+				<p>
+				You cannot run the old cs from the steam client anymore. It will launch/install the new version if you try that. Steam needs to be running still though.
+				<br>
+Open notepad put this in the file
+<br><br>
+<code>@ Echo off
+start /d "C:\Steam\steamapps\username\counter-strike\" hl.exe -steam -game cstrike -appid 10 -w 800 -h 600  -noipx -nojoy -noaafonts -heapsize 1048576</code>
+<br><br>
+Replace the path with the path to your cs folder. Custom launch options to desired. Save the file in notepad as a .bat( to your desktop type it in filename and then save as alltypes)
+				</p>
+				
+				<p>
+				Now you can start the old cs by double clicking the batch file. Steamoverlay even works in it. Luckily the new is protocol 48 still, so you play on all servers.
+								</p>
+				
+				<p>
+				You still should be able to run the new cs in steam with the old version still working, by launching it the normal way through steam.
+				</p>
+
+			</div>
+
+			<!-- End of Page Content -->
+
+		</div>
+		</div>
+		</div>
+
+		<!-- End of Body Container -->
+
+
+
+		<!-- Start of Navigation Menu -->
+
+		<div id="navmenu">
+		<div id="navmenu_b">
+		<div id="navmenu_c">
+
+			<h3><span class="hidethis">Site Menu:</span></h3>
+
+			<ul>
+			<li class="list_first"><a href="../cs/">CS Home</a></li>
+			<li><a href="settings.html">Settings</a></li>
+			<li><a href="oldcs.html">Running old cs</a></li>
+			<li><a href="history.html">History</a></li>
+			<li><a href="http://computoid.com">Back to Computoid.com</a></li>
+			</ul>
+
+
+		</div>
+		</div>
+		</div>
+
+		<!-- End of Navigation Menu -->
+
+
+		<div class="clearthis">&nbsp;</div>
+
+
+		<!-- Start of Page Footer -->
+
+		<div id="page_footer">
+		 <a href="http://computoid.com">Website by G4Vi</a>
+		</div>
+
+		<!-- End of Page Footer -->
+
+
+	</div>
+
+</body>
+</html>
