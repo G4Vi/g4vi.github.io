@@ -41,22 +41,81 @@ li {
 </head>
 <body>
 <div class="content">
-<h2>NAME</h2>
-<p>Actually Portable Perl (APPerl) - Build-once run-anywhere Perl using the <a href="https://justine.lol/cosmopolitan/">cosmopolitan libc</a></p>
-<h2>DESCRIPTION</h2>
-<p>APPerl is a distribution of Perl for most x86_64 operating systems contained in a single binary. That's right, you can use the exact same binary to run perl on Windows, Linux, OS X, FreeBSD, OpenBSD, and NetBSD without a VM. It is even can be built with all default C extensions and contains the standard perl modules and scripts embedded inside of it as the binary format is also a ZIP file.</p>
+<h2 id="NAME">NAME</h2>
+<p>Actually Portable Perl (APPerl)</p>
 
-<p>The extreme portability and ZIP container allows APPerl to be used to create cross-platform standalone perl applications. Right now, there isn't much tooling, but ideally it could be used as an alternative to building standalone executables with <a href="https://metacpan.org/pod/pp">PAR Packer</a> with the added benefits of greatly increased compatibility across x86_64 PCs. APPerl could also be embedded in development SDKs, carried on your USB drive, or just used a method to run the exact same perl on all your computers.</p>
-<h2>RELEASES</h2>
-<p>Coming soon.</p>
-<h2><a href="https://github.com/G4Vi/perl5">REPOSITORY</a></h2>
-<a href="https://github.com/G4Vi/perl5/blob/cosmo/README.cosmo">perlcosmo</a> - <small>Build info and instructions</small>
-<h2>PERLDOC</h2>
-<p>APPerl includes the perldoc program. For example:</p>
-<p>  <code>./perl.com /zip/bin/perldoc perlintro</code></p>
-<p>In <code>cmd.exe</code> run <code>perl.com</code> without the leading <code>./</code></p>
-<h2>COMMUNITY</h2>
+<h2 id="DESCRIPTION">DESCRIPTION</h2>
+<p>Actually Portable Perl (APPerl) is a distribution of Perl the runs on
+  several x86_64 operating systems (most Unix-like and Windows) via the same binary. It builds to a
+  single binary with perl modules packed inside of it.</p>
+
+<p>Cross-platform, single binary, standalone Perl applications can be made
+  by building custom versions of APPerl, with and without compiling
+  Perl from scratch, so it can be used an alternative to <a href="https://metacpan.org/pod/pp">PAR::Packer</a>.
+  APPerl could also easily be added to development SDKs,
+  carried on your USB drive, or just allow you to run the exact same perl
+  on all your PCs multiple computers.</p>
+
+<h2 id="FEATURES">FEATURES</h2>
+<ul>
+  <li>Runs on six operating systems with the same binary!</li>
+  <li>Full build of Perl 5, perl modules, C extensions, and all under 24 MiB, Small build under 5 Mib</li>
+  <li>Polygot binary format is also a ZIP file allowing for easy inspection and modification with standard tools</li>
+  <li>Scripts can be embedded and ran from inside the executable:<br><code>./perl.com /zip/bin/perldoc Perl::Dist::APPerl</code></li>
+  <li><code>argv[0]</code> script execution allows for easy creation of single file applications:<br><code>ln -s perl.com perldoc.com && ./perldoc.com Perl::Dist::APPerl</code></li>
+  <li><code>apperlm</code> tool enables building custom APPerl versions and applications with and without building Perl from source</li>
+</ul>
+
+<h2 id="RELEASES">RELEASES</h2>
+<p>APPerl releases are available in the <a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/latest">Perl::Dist::APPerl repository</a>.
+  <code>apperlm</code>, APPerl Manager (useful for creating custom builds and APPerl applications) is available on CPAN:
+  <a href="https://metacpan.org/pod/Perl::Dist::APPerl">Perl::Dist::APPerl</a>. <code>apperlm</code> is also packaged inside of full builds
+  of APPerl for convenience; see <a href="https://github.com/G4Vi/Perl-Dist-APPerl/blob/master/README.md#BOOTSTRAPPING">BOOTSTRAPPING</a>.</p>
+<h3>Latest Release Builds</h3>
+<ul>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/latest/download/perl.com"><code>perl.com</code></a> - The full release of APPerl, perl built with all default modules and C extensions.</li>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/latest/download/perl-small.com"><code>perl-small.com</code></a> - Slimmed down build of APPerl, no perldoc.</li>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/latest/download/perl-vista.com"><code>perl-vista.com</code></a> - Full APPerl, with Vista/7 support from an unofficial Cosmopolitan Libc fork</li>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/latest/download/perl-small-vista.com"><code>perl-small-vista.com</code></a> - Small APPerl, with Vista/7 support from an unofficial Cosmopolitan Libc fork</li>
+</ul>
+<h3>Releases</h3>
+<ul>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/tag/v0.0.1">v0.0.1 - first release</a></li>
+</ul>
+
+<h2 id="DOCUMENTATION, SOURCE CODE, AND SUPPORT">DOCUMENTATION, SOURCE CODE, AND SUPPORT</a></h2>
+<ul>
+  <li><a href="https://metacpan.org/pod/Perl::Dist::APPerl">Perl::Dist::APPerl documentation</a> - <small>APPerl usage info, <code>apperlm</code> documentation, instructions on building APPerl from source, and tutorials on creating custom applications and APPerl builds with and without compiling Perl from source.</small>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl">Perl::Dist::APPerl repository</a> - <small><code>apperlm</code> source code</small></li>
+  <li><a href="https://github.com/G4Vi/perl5">perl5 fork for the Cosmopolitan Libc</a> - <small>perl5 patched to support build with the cosmopolitan libc, see <a href="https://github.com/G4Vi/perl5/blob/cosmo/README.cosmo">perlcosmo</a></small></li>
+  <li><a href="https://github.com/jart/cosmopolitan">Cosmopolitan Libc</a> - <small>build system for producing Actually Portable Executables with syscall polyfills</small>
+</ul>
+<p>Support and bug reports should be filed as issues at the Perl::Dist::APPerl repo. Pull Requests are welcome at the repos.
+  The Cosmopolitan Libc is a third-party project, be sure to read the guidelines there if contributing there.</p>
+<p>Fixes to the cosmo platform in the perl source should be done on top of the <code>cosmo</code> branch. Improvements to APPerl, but unfit to be merged into official perl should be done
+  on top of the <code>cosmo-apperl</code> branch. Ideally someday we'll get the cosmo platform merged into official perl.</p>
+
+<h2 id="COMMUNITY">COMMUNITY</h2>
 <p>APPerl shares the <a href="https://discord.gg/ZGHZjQQyFS">cosmopolitan libc discord</a>.</p>
+
+<h2 id="ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</h2>
+<p>
+  The <a href="https://github.com/jart/cosmopolitan">Cosmopolitan Libc</a>
+    contributors, especially <a href="https://justine.lol/">Justine Tunney</a>
+    and <a href="https://ahgamut.github.io">Gautham Venkatasubramanian</a>.
+    APPerl wouldn't be possible without Actually Portable Executables and polyfills of several Linux and POSIX APIs for other
+    platforms. Gautham's <a href="https://ahgamut.github.io/2021/07/13/ape-python/">Python port</a> inspired this project.
+</p>
+
+<h2 id="AUTHOR">AUTHOR</h2>
+  <p>Gavin Hayes - my email and profiles are in the footer.</p>
+
+<h2 id="LICENSE AND COPYRIGHT">LICENSE AND COPYRIGHT</h2>
+  <p>This software is copyright (c) 2022 by Gavin Hayes.</p>
+
+  <p> This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.</p>
+
 <footer>
 <a href="https://github.com/G4Vi">GitHub</a><br>
 <a href="https://metacpan.org/author/GAHAYES">CPAN</a><br>
