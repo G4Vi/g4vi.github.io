@@ -80,14 +80,22 @@ li {
 </ul>
 <h3>Releases</h3>
 <ul>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/tag/v0.0.3">v0.0.3</a></li>
+  <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/tag/v0.0.2">v0.0.2 - add small builds</a></li>
   <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl/releases/tag/v0.0.1">v0.0.1 - first release</a></li>
 </ul>
+<h3>Running under pledge</h3>
+<p>If running third-party binaries makes you nervous, APPerl can be ran with <a href="https://justine.lol/pledge/">pledge</a> under Linux (<code>pledge.com</code> can be built from the source in the Cosmopolitan Libc repo).</p>
+<code>cp perl.com perl</code><br>
+<code>./perl --assimilate</code><br>
+<code>./pledge.com -p 'stdio rpath tty' ./perl -e 'print("hello world\n");'</code><br>
+<code>./pledge.com -p 'stdio rpath tty cpath proc exec prot_exec tmppath' ./perl /zip/bin/perldoc Perl::Dist::APPerl</code>
 
 <h2 id="DOCUMENTATION, SOURCE CODE, AND SUPPORT">DOCUMENTATION, SOURCE CODE, AND SUPPORT</a></h2>
 <ul>
   <li><a href="https://metacpan.org/pod/Perl::Dist::APPerl">Perl::Dist::APPerl documentation</a> - <small>APPerl usage info, <code>apperlm</code> documentation, instructions on building APPerl from source, and tutorials on creating custom applications and APPerl builds with and without compiling Perl from source.</small>
   <li><a href="https://github.com/G4Vi/Perl-Dist-APPerl">Perl::Dist::APPerl repository</a> - <small><code>apperlm</code> source code</small></li>
-  <li><a href="https://github.com/G4Vi/perl5">perl5 fork for the Cosmopolitan Libc</a> - <small>perl5 patched to support build with the cosmopolitan libc, see <a href="https://github.com/G4Vi/perl5/blob/cosmo/README.cosmo">perlcosmo</a></small></li>
+  <li><a href="https://github.com/G4Vi/perl5">perl5 fork for the Cosmopolitan Libc</a> - <small>perl5 patched to support building with the Cosmopolitan Libc, see <a href="https://github.com/G4Vi/perl5/blob/cosmo/README.cosmo">perlcosmo</a></small></li>
   <li><a href="https://github.com/jart/cosmopolitan">Cosmopolitan Libc</a> - <small>build system for producing Actually Portable Executables with syscall polyfills</small>
 </ul>
 <p>Support and bug reports should be filed as issues at the Perl::Dist::APPerl repo. Pull Requests are welcome at the repos.
@@ -96,7 +104,7 @@ li {
   on top of the <code>cosmo-apperl</code> branch. Ideally someday we'll get the cosmo platform merged into official perl.</p>
 
 <h2 id="COMMUNITY">COMMUNITY</h2>
-<p>APPerl shares the <a href="https://discord.gg/ZGHZjQQyFS">cosmopolitan libc discord</a>.</p>
+<p>APPerl shares the <a href="https://discord.gg/ZGHZjQQyFS">Cosmopolitan Libc discord</a>.</p>
 
 <h2 id="ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</h2>
 <p>
