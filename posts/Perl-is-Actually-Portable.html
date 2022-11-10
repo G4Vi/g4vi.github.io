@@ -120,7 +120,7 @@ header a {
 
 <p>After the last change, miniperl built! Perl programmers often prefer to write Perl to <i>sh</i> so Perl is built with Perl! To not have a chicken-and-egg situation making it difficult to port Perl to new platforms, the first thing built is <code>miniperl</code>, Perl without C or XS extension modules that can be used to assist with building the rest of Perl.</p>
 
-<p>To reduce dependence on the <code>superConfigure</code> script and make building Perl for Cosmopolitan similar to building Perl for other platforms, a <code>hints</code> file was created, <code>hints/cosmo.sh</code>. Once a platform is detected or set in <code>Configure</code>, it loads in the corresponding settings to ease building Perl for a platform.</p>
+<p>To reduce dependence on the <code>superConfigure</code> script and make building Perl for Cosmopolitan less different from building Perl for other platforms, a <code>hints</code> file was created, <code>hints/cosmo.sh</code>. Once a platform is detected or set in <code>Configure</code>, it loads in the corresponding settings to ease building Perl for a platform.</p>
 
 <h3 id="Passing make minitest">Passing <code>make minitest</code></h3>
 
