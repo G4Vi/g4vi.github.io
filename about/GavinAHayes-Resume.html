@@ -87,26 +87,34 @@ header a {
 <p id="contact-profiles"><span>gavin</span><span>@</span><span>computoid.com</span> | <a href="https://computoid.com">computoid.com</a> | <a href="https://github.com/G4Vi">github.com/G4Vi</a> | <a href="https://metacpan.org/author/GAHAYES">metacpan.org/author/GAHAYES</a></p>
 </header>
 <h2 class="sectionheader">Skills</h2>
-<p style="margin-top: 0.25em;"><strong>Programming Languages:</strong> C, C++, Perl, Python, JavaScript, HTML/CSS, C#, PHP, SQL, Bash, Expect</p>
+<p style="margin-top: 0.25em;"><strong>Programming Languages:</strong> C, C++, Perl, Rust, JavaScript, Python, HTML/CSS, C#, PHP, PostgreSQL</p>
 
 <p><strong>Target Platforms:</strong> Various x86-64 Linux, Windows, etc., Qt on armhf BeagleBone running Debian GNU/Linux 8-10, Win32/MFC on x86 Windows XP Embedded through Windows 10 IoT Enterprise, V8 and SpiderMonkey browser engines, AWS, Cypress PSoC, Sony PlayStation</p>
 
 <p><strong>Tooling:</strong> Git (<code>merge</code>, <code>rebase</code>), VSCode (launch configs), Make, CMake, tmux, gdb, x64dbg, Ghidra, Docker, WSL, VirtualBox, VMWare, GitHub Actions (CI)</p>
 
-<p><strong>Technical Writing and Communication:</strong> tutorials, reference material, changelogs, blog post, bug reports, sync and async communication and collaboration with developers, end users, and other stakeholders</p>
+<p><strong>Technical Writing and Communication:</strong> tutorials, reference material, changelogs, blog post, bug reports, presenting at conferences, sync and async communication and collaboration with developers, end users, and other stakeholders</p>
 
 <h2 class="sectionheader">Experience</h2>
 <h4 style="margin-top: 0.25em; margin-bottom: 0;">Dylibso - <i>Senior Software Engineer</i></h4>
-<p style="margin: 0; padding-left: 1em;"><small>Full-time May 2023 - PRESENT</small></p>
+<p style="margin: 0; padding-left: 1em;"><small>May 2023 - July 2025</small></p>
+<ul style="margin: 0;">
+  <li>Built an instrumenting recompiler for adding observability to existing WebAssembly modules using <a href="https://github.com/WebAssembly/binaryen#binaryen">Binaryen</a>. Co-hosted <a href="https://2024.wasm.io/sessions/the-wasm-practitioners-guide-to-observability/">Wasm Observability Workshop</a></li>
+  <li>Developed the cross-language <a href="https://extism.org/">Extism framework</a> for building with WebAssembly. Worked on C++, Python, C, and Perl support. Presented <a href="https://www.youtube.com/watch?v=7THl2DSbZNc">Perl SDK at TPRC 2024</a></li>
+  <li>Developed a queue and processing system to test and validate uploaded WebAssembly modules conformed to an interface. (XTP Processor)</li>
+  <li>Added <a href="https://github.com/dylibso/xtp-cpp-bindgen">C++ support</a> and improved <a href="https://github.com/dylibso/xtp-python-bindgen/commits/main?author=G4Vi">Python support</a> to OpenAPI-like schema bindings generator, XTP bindgen to ease WebAssembly plugin development</li>
+  <li>Built custom OAuth client implementation (Backend and Frontend) for allowing users to add services and remote MCP(Model Context Protocol) servers to <a href="https://www.mcp.run/">mcp.run</a></li>
+  <li>Added authorization management (backend and frontend) and found and fixed authentication security bug with OAuth server implementation</li>
+</ul>
 <h4 style="margin-top: 0.25em; margin-bottom: 0;">TestVonics - <i>a Raptor Scientific Company</i> - <i>Lead Software Engineer</i></h4>
-<p style="margin: 0; padding-left: 1em;"><small>Full-time May 2017 - May 2023, interned summers 2014-2016 and winter 2016</small></p>
+<p style="margin: 0; padding-left: 1em;"><small>May 2017 - May 2023, interned summers 2014-2016 and winter 2016</small></p>
 <ul style="margin: 0;">
   <li>Built a touchscreen handheld serial remote for an Air Data Test Set using C, C++, Qt, and Debian linux on a BeagleBone. WiFi version using UDP communication currently under development</li>
   <li>Upgrades and Maintenance to a Win32 MFC based Air Data Test Set and Calibrator, including migration from VC++6 and Windows XP to VS2017 and Windows 10 IoT Enterprise, addition of Quick Leak Test, STEP function, and addition of several safety features and QoL improvements.</li>
   <li>Built a pressure monitoring device using a Toradex WinCE board and readings over CAN bus</li>
 </ul>
 <h4 style="margin-top: 0.25em; margin-bottom: 0;">O2X Human Performance - <i>Web Developer</i></h4>
-<p style="margin: 0; padding-left: 1em;"><small>Remote Contractor May - September 2018</small></p>
+<p style="margin: 0; padding-left: 1em;"><small>Part-time Remote Contractor May - September 2018</small></p>
 <ul style="margin: 0;">
   <li>Brought an AWS Elastic beanstalk Node.js application back online after a dead link disabled the service.</li>
   <li>Added new questions to the assessment app via changes in Typeform, Zapier, and the Node.js server.</li>
@@ -114,9 +122,9 @@ header a {
 <h4 style="margin-top: 0.25em; margin-bottom: 0;">Open Source Software Development</h4>
 <ul style="margin: 0;">
   <li>Media HTTP File Server (<small>2018 - PRESENT</small>) - Built an event based HTTP media server and web app for streaming media via the browser or other applications using Perl, C, JS, and WASM. <a href="https://github.com/G4Vi/MHFS">github.com/G4Vi/MHFS</a></li>
-  <li>Actually Portable Perl (<small>2022 - PRESENT</small>) - Ported Perl to the Cosmopolitan Libc, created single-file self-contained builds of Perl that run on six operating systems with the same binary, created a toolkit for creating binary releases of Perl applications. <a href="https://computoid.com/posts/Perl-is-Actually-Portable.html">computoid.com/posts/Perl-is-Actually-Portable.html</a>  <a href="https://computoid.com/APPerl/">computoid.com/APPerl/</a></li>
+  <li>Actually Portable Perl (<small>2022 - PRESENT</small>) - Ported Perl to the Cosmopolitan Libc, created single-file self-contained builds of Perl that run on six operating systems with the same binary, created a toolkit for creating binary releases of Perl applications. <a href="https://computoid.com/posts/Perl-is-Actually-Portable.html">computoid.com/posts/Perl-is-Actually-Portable.html</a>  <a href="https://computoid.com/APPerl/">computoid.com/APPerl/</a> <a href="https://www.youtube.com/watch?v=H3dITR0np54">Talk at TPRC 2024</a></li>
   <li>Cosmopolitan Libc (<small>2022 - PRESENT</small>) - Contributed various bug fixes and improvements to the Cosmopolitan Libc. <a href="https://github.com/jart/cosmopolitan/pulls?q=is%3Apr+author%3AG4Vi">github.com/jart/cosmopolitan/pulls?q=is:pr+author:G4Vi</a></li>
-  <li>psx_screen_dumper / screen_data_reader (<small>2021, PRESENT</small>) - Built a pair of applications to exfiltrate the BIOS or save game data from a PlayStation via video by using OpenCV via python <a href="https://github.com/G4Vi/psx_screen_dumper">github.com/G4Vi/psx_screen_dumper</a> <a href="https://github.com/G4Vi/screen_data_reader/">github.com/G4Vi/screen_data_reader/</a></li>
+  <li>psx_screen_dumper / screen_data_reader (<small>2021-2022</small>) - Built a pair of applications to exfiltrate the BIOS or save game data from a PlayStation via video by using OpenCV via python <a href="https://github.com/G4Vi/psx_screen_dumper">github.com/G4Vi/psx_screen_dumper</a> <a href="https://github.com/G4Vi/screen_data_reader/">github.com/G4Vi/screen_data_reader/</a></li>
   <li>mkpsxiso (<small>2021-2022</small>) - Improve CDDA pregap handling for bit-perfect unpacking and repacking of CD images. Add extracting CDDA as FLAC (instead of raw PCM) with repacking support to save disk space.</li>
   <li>tonyhax (<small>2021</small>) - Found a buffer overflow and developed MIPS shellcode to exploit a save game feature in a PlayStation game. <a href="https://github.com/socram8888/tonyhax/pull/62">github.com/socram8888/tonyhax/pull/62</a></li>
   <li>GIF Encoding (<small>2021</small>) - Added transparency support to a GIF encoder and ported the GIF encoder to Perl. <a href="https://github.com/lecram/gifenc/pulls?q=is%3Apr+author%3AG4Vi">github.com/lecram/gifenc/pulls?q=is%3Apr+author%3AG4Vi</a>, <a href="https://github.com/G4Vi/gifenc">github.com/G4Vi/gifenc</a>, <a href="https://metacpan.org/pod/Image::GIF::Encoder::PP">metacpan.org/pod/Image::GIF::Encoder::PP</a></li>
