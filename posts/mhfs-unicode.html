@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1024">
+<title>Text Handling Challenges in MHFS Development | Computoid</title>
+<style>
+/* Styling heavily inspired from https://justine.lol */
+html {
+  font-family: sans-serif;
+  font-size: 14pt;
+}
+
+body {
+  max-width: 960px;
+  min-width: 960px;
+  margin: 0 auto 0 auto;
+  margin-top: 2em;
+  background: white;
+}
+
+h1 {
+  margin: 0;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+
+.content {
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+footer {
+  padding-bottom: 1em;
+}
+
+li {
+  padding: .2em 0;
+}
+
+/* new code*/
+.ncode {
+  color: green;
+}
+
+/* deleted code */
+.dcode {
+  color: red;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+header {
+  display: block;
+}
+
+header a {
+  color: black;
+}
+
+#sitename {
+  display: inline;
+}
+
+/* https://css-tricks.com/a-perfect-table-of-contents-with-html-css/ */
+.toc-list, .toc-list ol {
+  list-style-type: none;
+}
+
+.toc-list {
+  padding: 0;
+}
+
+.toc-list ol {
+  padding-inline-start: 2ch;
+}
+
+</style>
+</head>
+<body>
+<div class="content">
+<header><h2 id="sitename"><a href="../">Computoid</a></h2> | <a href="../about/">About</a> | <a href="../APPerl/">APPerl</a></header>
+<h1 id="TITLE" style="padding-bottom: 0">Text Handling Challenges in MHFS Development</h1>
+<small><time>September 18, 2025</time> by Gavin Hayes</small>
+<p>The most persistent
+challenge I’ve had while developing <a href="https://github.com/G4Vi/MHFS#mhfs---media-http-file-server">Media HTTP File Server (MHFS)</a> is
+proper text handling. This post explains why and covers solutions to
+various problems I’ve encountered. Before proceeding,  if you are
+not familiar with Unicode and UTF-8 or the term <i>surrogate pairs,</i>
+I recommend reading <a href="https://tonsky.me/blog/unicode/">The Absolute Minimum Every Software Developer
+Must Know About Unicode in 2023 (Still No Excuses!)</a>.</p>
+<h3 style="padding-bottom: 0; margin: 0;">Table of Contents</h3>
+<ol class="toc-list" role="list" style="margin-top: 0;">
+  <li><a href="#Introduction">Introduction</a></li>
+  <li><a href="#Perl and Unicode">1.0 Perl and Unicode</a></li>
+  <li><a href="#Filename Handling">2.0 Filename Handling</a>
+    <ol role="list">
+      <li><a href="#Filename Serialization">2.1 Filename Serialization</a></li>
+    </ol>
+  </li>
+  <li><a href="#Displaying Malformed Strings">3.0 Displaying Malformed Strings</a></li>
+  <li><a href="#JSON Decoding">4.0 JSON Decoding</a></li>
+  <li><a href="#Wrap Up">5.0 Wrap Up</a></li>
+</ol>
+<h2 id="Introduction">Introduction</h2>
+<p>MHFS was spawned out
+of frustration with other media server solutions such as Plex. The
+existing media servers often had restrictions on file formats and
+file organization, had lengthy metadata scanning processes, were
+resource intensive, and slow in general. MHFS strives to seamlessly
+work on existing media directories without modification. Working on a
+large set of media mostly sourced from the internet has presented
+many technical challenges; Text handling has been the most pervasive
+one.</p>
+<h2 id="Perl and Unicode">Perl and Unicode</h2>
+<p>Unicode support is
+an afterthought for Perl. Perl predates Unicode and did not have any Unicode
+support until version 5.6.0 in 2000. Perl did not have good Unicode
+support until 5.14 in 2011. The 3<sup>rd</sup> edition of
+<i>Programming Perl</i> (2000) lists out these tenants:</p>
+<ol>
+<li>Old byte-oriented
+programs should not spontaneously break on the old byte-oriented data
+they used to work on.</li>
+<li>Old byte-oriented
+programs should magically start working on the new character-oriented
+data when appropriate.</li>
+<li>Programs should
+run just as fast in the new character-oriented mode as in the old
+byte-oriented mode.</li>
+<li>Perl should
+remain one language, rather than forking into a byte-oriented Perl and a character-oriented Perl.</li>
+</ol>
+<p>They did come close
+to accomplishing all those goals, however, Unicode is still hard to
+get right in Perl:</p>
+
+<p>The main challenge
+is, the language doesn’t know the type of strings. Is a string a text
+string or a byte string? For efficiency and backwards compatibility,
+Perl can store a string such as <i>café</i> two different ways, in UTF-8 as <code>63 61 66 C3 A9</code> or in Latin-1
+(ISO 8859-1) as <code>63 61 66 E9</code> instead. This abstraction leaks when
+passing strings outside of Perl. Outside of Perl, if the strings are not encoded first, they are different strings.
+See for yourself:</p>
+
+<p><pre><code><span class="ncode">#!/usr/bin/env perl</span>
+use 5.014;
+use strict;
+use warnings;
+use utf8;
+use Encode qw(encode);
+binmode(STDOUT, ":utf8");
+
+sub dump_string {
+    my ($str) = @_;
+    my $flag = utf8::is_utf8($str) || 0;
+    Encode::_utf8_off($str);
+    'UTF8 flag: '.$flag.' bytes: '. uc(join(' ', unpack('(H2)*', $str)))
+}
+
+my $latin_1 = "caf\xE9";
+my $utf_8 = 'café';
+<span class="ncode"># both strings have different internal representations</span>
+say 'café stored in latin-1: '.dump_string($latin_1);
+say 'café stored in utf-8: '.dump_string($utf_8);
+<span class="ncode"># yet they are equal</span>
+say $latin_1 eq $utf_8 ? "café strings match" : "café strings do not match";
+<span class="ncode"># but not to external APIs</span>
+mkdir($latin_1);
+say "latin-1 café directory " . ((! -e $latin_1) ? "does not " : '') . "exist";
+say "utf-8 café directory " . ((! -e $utf_8) ? "does not " : '') . "exist";
+rmdir($latin_1);
+<span class="ncode"># you must encode your strings before passing to external apis</span>
+my $no_longer_latin_1 = encode('UTF-8', $latin_1, Encode::LEAVE_SRC);
+my $still_utf_8 = encode('UTF-8', $utf_8, Encode::LEAVE_SRC);
+<span class="ncode"># now they refer to the same string to external apis</span>
+say 'latin-1 café after encoding to utf-8: ' . dump_string($no_longer_latin_1);
+say 'utf-8 café after encoding to utf-8: ' . dump_string($still_utf_8);
+</code></pre>
+Output:
+<pre><code>café stored in latin-1: UTF8 flag: 0 bytes: 63 61 66 <mark>E9</mark>
+café stored in utf-8: UTF8 flag: 1 bytes: 63 61 66 <mark>C3 A9</mark>
+café strings match
+latin-1 café directory exist
+utf-8 café directory does not exist
+latin-1 café after encoding to utf-8: UTF8 flag: 0 bytes: 63 61 66 C3 A9
+utf-8 café after encoding to utf-8: UTF8 flag: 0 bytes: 63 61 66 C3 A9
+</code></pre>
+</p>
+
+<p>When bytes can be
+characters, it’s easy to forget to encode outgoing or decode
+incoming text:</p>
+
+<p><pre><code><span class="ncode">#!/usr/bin/env perl</span>
+use 5.014;
+use strict;
+use warnings;
+use utf8;
+use Encode qw();
+binmode(STDOUT, ":utf8");
+
+sub dump_string {
+    my ($str) = @_;
+    my $flag = utf8::is_utf8($str) || 0;
+    Encode::_utf8_off($str);
+    'UTF8 flag: '.$flag.' bytes: '. uc(join(' ', unpack('(H2)*', $str)))
+}
+
+<span class="ncode"># you receive a UTF-8 string, but you forget to decode it</span>
+my $encoded = "caf\xC3\xA9";
+say "café (still encoded): ".dump_string($encoded);
+<span class="ncode"># you perform operations on the string resulting in an "upgrade"</span>
+<span class="ncode"># an upgrade switches the internals from latin-1 to utf-8</span>
+my $upgraded = $encoded . "\x{263A}";
+chop $upgraded;
+<span class="ncode"># whoops, our string is now double encoded</span>
+say "café (upgraded while encoded): ".dump_string($upgraded);
+</code></pre>
+Output:
+<pre><code>café (still encoded): UTF8 flag: 0 bytes: 63 61 66 <mark>C3 A9</mark>
+café (upgraded while encoded): UTF8 flag: 1 bytes: 63 61 66 <mark>C3 83 C2 A9</mark>
+</code></pre></p>
+
+<p>In Perl, it’s up
+to the programmer to know whether a string is characters or bytes. To
+disambiguate character strings and byte strings, in MHFS some byte
+strings are named with the Systems Hungarian-like <code>b_</code> prefix for
+bytes or binary to reduce confusion. Even with this labeling, it’s
+been a battle to get decoding and encoding right in MHFS, as often
+you still get the correct or correct-looking output even when you
+forgot to decode or encode, especially if most of your data is ASCII.
+ For correct text handling, I recommend consolidating the encoding
+and decoding to as few places as possible so more code is correct
+without needing to perform the operation themselves. MHFS doesn’t
+practice that consistently yet. For example, UTF-8 decoding can be
+removed from various request handlers if its moved into the HTTP
+request parsing code as most handlers actually want text not bytes.</p>
+
+<h2 id="Filename Handling">Filename Handling</h2>
+
+<p>I used to think
+filenames were strings. In MHFS development I learned the hard way
+they are not, or at least it’s not that simple. First, I produced
+JSON with filenames that when queried did not exist (they were
+corrupted as I didn’t decode my strings before encoding to JSON so
+they were treated as Latin-1 and converted to UTF-8. Even after
+decoding them, some filenames still couldn’t be queried. The
+filenames had the dreaded �, U+FFFD, the Unicode replacement
+character, which was not present in the source filename.</p>
+
+<p>On Windows, NTFS
+filenames are supposed to be UTF-16 but are not validated as such.
+They are not validated due to backwards compatibility with UCS-2 and
+likely performance issues in the past. The only way to have invalid
+UTF-16 is to have an <i>unpaired</i>/<i>lone surrogate</i>, such as a
+high surrogate not followed by a low surrogate or a low surrogate not
+preceded by a high surrogate.</p>
+
+<p>In Perl, Unicode
+strings can actually store lone surrogates. To Perl the surrogate
+code points are just like any other code points; just decode with
+<code>utf8</code> instead of <code>UTF-8</code>. Languages that use UTF-16 as their string
+encoding also often allow lone surrogates in strings: Java,
+Javascript, and C# all allow them even through they make a string
+ill-formed UTF-16. If your goal is to store Windows filenames in a
+string, this is a feature, otherwise it’s a pretty serious bug. If
+your strings can store lone surrogates, your strings may not be valid
+Unicode; therefore, they are not portable and they cannot be losslessly encoded
+as UTF-8. In Perl, this compounds the question,  “Is my string a
+text string and can it be encoded to Unicode?”</p>
+
+<p>Various filesystems
+beyond NTFS have different constraints. Filenames can often contain
+invalid Unicode beyond lone surrogates. On most Unix systems
+(including Linux, but not Mac), filenames can be any set of bytes
+besides <code>/</code> and <code>\0</code>, though
+are mostly encoded as UTF-8 on Linux.</p>
+
+<p>For maximum
+compatibility with any filename, MHFS stores filenames as byte
+strings. Before we move on to transmitting filenames through UTF-8,
+it’s worth mentioning some alternative approaches:
+</p>
+
+<p>While Python does
+have byte strings as a distinct type, <a href="https://peps.python.org/pep-0383/"><i>surrogateescape </i>encoding
+/ error handling</a> enables storing
+arbitrary bytes in strings by encoding them into the surrogate code
+points as they are not in valid UTF-8. This allows manipulation of
+all filenames as strings (but makes strings not necessarily valid
+Unicode), requires keeping track of the type of the string as they
+are not flagged as <i>surrogateescape, </i>and requires encoding to
+pass to external APIs assuming they weren’t expecting
+<i>surrogateescape</i> strings.</p>
+
+<p>Rust has the
+<a href="https://doc.rust-lang.org/std/ffi/struct.OsString.html"><i>OsString</i></a>
+type for storing filenames. It’s almost as easy to work with as a
+<i>String</i> and provides the same interface on all platforms
+despite varying internals. Rather than using 16 bit characters on
+Windows to store ill-formed UTF-16, <a href="https://wtf-8.codeberg.page/">WTF-8</a> was created.
+WTF-8 is simply UTF-8 with surrogates allowed. On Linux, <i>OsString</i>
+is implemented with a byte string to enable storing any sequence of bytes.</p>
+
+<h3 id="Filename Serialization">Filename Serialization</h3>
+
+</p>
+<p>Whether you are
+using a byte string, <i>surrogateescape</i>, or WTF-8 to store your
+filenames, none of these can be passed through UTF-8 as is, e.g.
+they cannot be encoded in JSON. MHFS uses escaping and encoding to serialize
+them to text and occassionally circumvents the problem using mapping.</p>
+
+<p><a href="https://github.com/G4Vi/MHFS/blob/8c7e747910e1ab06dd25d7af9fb75e58bb59ab04/App-MHFS/lib/MHFS/Plugin/MusicLibrary.pm">MHFS::Plugin::MusicLibrary</a>
+ (see BuildLibrary and FindInLibrary) uses mapping, when building the
+library filenames are transformed to UTF-8
+(stay tuned for <a href="#Displaying Malformed Strings">Displaying Malformed Strings</a>) and stored to be queried.
+The library JSON only provides the UTF-8 valid names. On request,
+each part of the request path is queried to
+determine the real filenames in the path. This approach fails if
+there’s a naming collision, multiple files have identical UTF-8 cleaned
+names so only one of them can be queried.</p>
+
+<p><a href="https://github.com/G4Vi/MHFS/blob/8c7e747910e1ab06dd25d7af9fb75e58bb59ab04/App-MHFS/lib/MHFS/Plugin/VideoLibrary.pm#L86-L118">MHFS::Plugin::VideoLibrary</a>
+uses URI escaping and thus requires transferring the filename twice,
+once as UTF-8 clean text and once as a part of a URL with all the
+inefficiency of percent-encoding.
+</p>
+
+<p>MHFS::Plugin::Kodi's modules such as <a href="https://github.com/G4Vi/MHFS/blob/29d31c04345d327596bae999e57885f29d1c07b8/App-MHFS/lib/MHFS/Kodi/Season.pm">MHFS::Kodi::Season</a> uses base64url to encode the paths to
+items. Using base64url prevents the request parser from expanding
+parts of the URL as encoded slashes are currently handled the same as
+unencoded slashes as URI decoding is done too early in the request
+handler.</p>
+
+<h2 id="Displaying Malformed Strings">Displaying Malformed Strings</h2>
+<p>For interchange, filenames can be serialized, but how can you display them?
+Unicode recommends replacing invalid sequences with �, U+FFFD, the replacement
+character, a lossy method. The MHFS::Plugin::MusicLibrary component expands upon
+this, it first attempts to recover incorrectly encoded characters. <a href ="https://github.com/G4Vi/MHFS/blob/d369f01b343023331f901ece7a9b140972c949cd/App-MHFS/lib/MHFS/Util.pm#L380-L407">It joins
+surrogate pairs:</a></p>
+<pre><code>sub get_printable_utf8 {
+    my ($octets) = @_;
+    my $res;
+    while(length($octets)) {
+        $res .= decode('UTF-8', $octets, Encode::FB_QUIET);
+        last if(!length($octets));
+
+        <span class="ncode"># by default replace with the replacement char</span>
+        my $char = _peek_utf8_codepoint($octets);
+        my $toappend = chr(0xFFFD);
+        my $toremove = $char->{bytelength};
+
+        <span class="ncode"># if we find a surrogate pair, make the actual codepoint</span>
+        my $mask = ~0 << 16 | 0xFC00;
+        if (length($octets) >= 6 && ($char->{bytelength} == 3) && (($char->{codepoint} & $mask) == 0xD800)) {
+            my $secondchar = _peek_utf8_codepoint(substr($octets, 3, 3));
+            if(($secondchar->{bytelength} == 3) && (($secondchar->{codepoint} & $mask) == 0xDC00)) {
+                $toappend = surrogatecodepointpairtochar($char->{codepoint}, $secondchar->{codepoint});
+                $toremove += 3;
+            }
+        }
+
+        $res .= $toappend;
+        substr($octets, 0, $toremove, '');
+    }
+    return $res;
+}
+</code></pre>
+
+<p>In case the Perl is hard to follow: Decode UTF-8 until an error, on error,
+try to decode the
+character. If the character is a high surrogate,
+check if the next character is a low surrogate. If so, replace the
+surrogate pair with the proper UTF-8 character, if not replace the
+first character with the replacement character. Repeat for the rest
+of the input.</p>
+
+<p>You may be wondering how exactly do you end up with a WTF-8 string with an
+embedded valid surrogate pair?</p>
+
+<p>Short answer:</p>
+<p><img style="width: 75%; height: auto" src="mhfs-unicode-uTorrent-Logo-2010.png" alt= "uTorrent 2010 logo"></p>
+<p>Long answer:</p>
+<p> Let's investigate.</p>
+<p>These files came from a torrent. Looking at the torrent file in hex, we can look at the filenames:</p>
+<code>6820 6920 7320 <mark>eda0 bced be84</mark> 2078 206d  h i s ...... x m</code>
+<p>A surrogate pair! If we decode the surrogates and calculate the code point,
+we get U+1F384, 🎄.</p>
+<p>Scrolling up to the top:</p>
+<pre><code>0000 2f61 6e6e 6f75 6e63 6531 303a 6372  ../announce10:cr
+6561 7465 6420 6279 3133 3a75 546f 7272  eated by13:<mark>uTorr</mark>
+656e 742f 3232 3130 3133 3a63 7265 6174  <mark>ent/2210</mark>13:creat
+696f 6e20 6461 7465 6931 3630 3738 3233  ion datei<mark>1607823</mark>
+3933 3865 383a 656e 636f 6469 6e67 353a  <mark>938</mark>e8:encoding5:</code></pre>
+<p>uTorrent 2.2.1, released in 2011, was used in 2020 to create this file.
+When creating the
+torrent file, uTorrent failed to correctly convert UTF-16 to UTF-8.
+A naïve implementation of UTF-16 to UTF-8 maps each UTF-16
+character to a UTF-8 character. That works for most text but falls over
+when the character is part of a surrogate pair. When surrogate characters are
+encoded, you're left with WTF-8 text, in this case filenames. The BitTorrent 1.0
+spec mandates UTF-8 filenames. Either
+by mistake, but more likely for compatibility with torrents that
+(incorrectly) use a different character set, when downloaded,
+rTorrent creates files with the malformed filenames. This is a prime
+example of how critical it is to get your text encoding right. Poor
+text encoding is contagious, in this case, spreading from computer
+system to computer system by P2P or copied by other means, forcing
+other software to handle it downstream.
+</p>
+
+<h2 id="JSON Decoding">JSON Decoding</h2>
+<p>Trying to keep
+invalid UTF-8 out of my strings and learning about the evolution of
+Perl’s Unicode handling, I became skeptical about the correctness
+of my JSON decoding and ran some tests.</p>
+
+<p>I noticed a
+discrepancy between how escaped non-characters and surrogates were
+handled versus encoded ones. Escaped non-characters warned and
+escaped surrogates errored, but encoded ones of either were ignored.</p>
+
+<p>The non-character
+warning appeared to be from pre-<a href="https://www.unicode.org/versions/corrigendum9.html">Corrigendum #9</a>
+days when they weren’t legal to interchange so <a href="https://github.com/rurban/Cpanel-JSON-XS/commit/146af141ad89853ae2f80cbb6ae11b5493ebb8ff">it was removed</a>
+and handled the same as encoded non-characters.
+</p>
+
+<p>The surrogate issue
+was more severe, as it allows malformed JSON to silently infect your
+strings with invalid Unicode. Conveniently it used Perl’s internal
+UTF-8 decoding functions, so <a href="https://github.com/rurban/Cpanel-JSON-XS/commit/97603917f07732add2faf22d743c81dc0a40f53a">the fix</a> to <code>Cpanel::JSON::XS</code> involved
+just passing <code>UTF8_DISALLOW_SURROGATE</code> on applicable Perls.
+Thank you Reini
+Urban (rurban) for reviewing and merging! This vulnerability still in
+exists in two of the other popular Perl JSON decoders, <code>JSON::XS</code> and
+<code>JSON::PP</code>, neither of their maintainers responded to my bug report.</p>
+
+<p>For MHFS, these
+fixes haven’t been strictly necessary as JSON decoding right
+now is localized to decoding data from The Movie Database (TMDB),
+and it hasn’t been observed outputting malformed data, however, it
+will be good for peace of mind. It’s on the to-do list to prefer
+using <code>Cpanel::JSON::XS</code> when available.</p>
+
+<h2 id="Wrap Up">Wrap up</h2>
+<p>Proper Unicode
+handling isn’t trivial but is worth implementing whether it’s for
+internationalization or emojis. It’s impressive Unicode was able to
+be added to Perl in such a late state, but the end result isn’t
+foolproof and shows how the lack of nominal typing can be a hindrance
+to writing a correct program.
+Though they may look like them, filenames are not necessarily strings
+and require careful handling to store and transmit. Text handling
+isn’t perfect in MHFS and continues to be improved but getting it
+right in various areas has been satisfying.</p>
+
+<footer>
+--
+<p style="margin-top: 0px">I am looking for a
+	full-time position to continue my career, particularly cross-platform
+	and systems work in C, C++, Rust, etc. See résumé: <a href="../about/GavinAHayes-Resume.html">HTML</a>|<a href="../about/GavinAHayes-Resume.pdf">PDF</a> or check out my
+	<a href="../">portfolio</a>.</p>
+Gavin Hayes | gavin [at] computoid dawt com | <a href="https://github.com/G4Vi">GitHub</a> | <a href="https://metacpan.org/author/GAHAYES">CPAN</a>
+<br>
+</footer>
+</div>
+</body>
+</html>
